@@ -15,6 +15,9 @@ func main() {
 	r.POST("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
 	})
+	r.POST("/tg", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
+	})
 
-	r.Run(":9990")
+	r.Run(":9980")
 }
