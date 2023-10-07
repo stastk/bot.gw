@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 
@@ -30,28 +31,34 @@ func setupRouter() *gin.Engine {
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"ANSWER": "PONG"})
 	})
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
-	})
-	r.POST("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
-	})
-	r.POST("/tg", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
-	})
 	r.POST("/tg/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
-		tgBawimySie("Something")
+		jsonData, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			// Handle error
+		}
+		tgBawimySie(jsonData)
 	})
 
 	return r
 
 }
 
-func tgBawimySie(msg string) {
+type Result struct {
+	Result string `json:"result,omitempty"`
+}
+
+func tgBawimySie(jsonData []byte) {
+
+	data := Result{}
+
+	if err := json.Unmarshal(jsonData, &data); err != nil {
+		panic(err)
+	}
+
 	chatId := ""
 	botId := ""
-	message := msg
+	message := data.Result
 	url := "https://api.telegram.org/bot" + botId + "/sendMessage?chat_id=" + chatId + "&text=" + message
 
 	jsonStr := []byte(`{}`)
