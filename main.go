@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"main/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -57,10 +58,8 @@ func tgBawimySie(jsonData []byte) {
 		fmt.Println(key, ":", value)
 	}
 
-	// chatId := ""
-	// botId := ""
-	// message := result["result"].(string)
-	// url := "https://api.telegram.org/bot" + botId + "/sendMessage?chat_id=" + chatId + "&text=" + message
+	message := result["result"].(string)
+	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + message
 
 	jsonStr := []byte(`{}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
