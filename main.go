@@ -63,8 +63,8 @@ func tgBawimySie(jsonData []byte) {
 		if !ok {
 			continue
 		}
-		//fmt.Println(key, ":", value)
 	}
+	fmt.Println(message)
 	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + message
 
 	jsonStr := []byte(`{}`)
