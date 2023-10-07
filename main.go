@@ -3,8 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -47,18 +47,20 @@ func setupRouter() *gin.Engine {
 
 func tgBawimySie(jsonData []byte) {
 
-	rawData := []byte(jsonData)
-	var payload interface{}                  //The interface where we will save the converted JSON data.
-	err := json.Unmarshal(rawData, &payload) // Convert JSON data into interface{} type
+	var result map[string]interface{}
+	err := json.Unmarshal([]byte(jsonData), &result)
 	if err != nil {
-		log.Fatal(err)
+		// print out if error is not nil
+		fmt.Println(err)
 	}
-	m := payload.(map[string]interface{})
+	for key, value := range result {
+		fmt.Println(key, ":", value)
+	}
 
-	chatId := ""
-	botId := ""
-	message := m["result"].(string)
-	url := "https://api.telegram.org/bot" + botId + "/sendMessage?chat_id=" + chatId + "&text=" + message
+	// chatId := ""
+	// botId := ""
+	// message := result["result"].(string)
+	// url := "https://api.telegram.org/bot" + botId + "/sendMessage?chat_id=" + chatId + "&text=" + message
 
 	jsonStr := []byte(`{}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
