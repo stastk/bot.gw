@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 
@@ -40,10 +41,30 @@ func setupRouter() *gin.Engine {
 	})
 	r.POST("/tg/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world "})
+		tgBawimySie("Something")
 	})
 
 	return r
 
+}
+
+func tgBawimySie(msg string) {
+	chatId := ""
+	botId := ""
+	message := msg
+	url := "https://api.telegram.org/bot" + botId + "/sendMessage?chat_id=" + chatId + "&text=" + message
+
+	jsonStr := []byte(`{}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
 }
 
 func main() {
