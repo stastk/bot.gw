@@ -61,7 +61,7 @@ func tgBawimySie(jsonData []byte) {
 	for key, value := range result {
 		_, ok := value.(string)
 		if ok {
-			message += key + ":" + value.(string)
+			message = message + "; " + key + ":" + value.(string)
 			fmt.Println(key, ":", value.(string))
 		}
 		if !ok {
