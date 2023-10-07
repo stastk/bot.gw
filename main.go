@@ -54,11 +54,17 @@ func tgBawimySie(jsonData []byte) {
 		// print out if error is not nil
 		fmt.Println(err)
 	}
+	message := ""
 	for key, value := range result {
-		fmt.Println(key, ":", value)
+		_, ok := value.(string)
+		if ok {
+			message += key + ":" + value.(string)
+		}
+		if !ok {
+			continue
+		}
+		//fmt.Println(key, ":", value)
 	}
-
-	message := result["result"].(string)
 	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + message
 
 	jsonStr := []byte(`{}`)
