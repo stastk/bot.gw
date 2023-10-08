@@ -46,11 +46,11 @@ func setupRouter() *gin.Engine {
 
 }
 
-// message :
+// j := []byte(`{message :
 // 	map[
 // 		chat:map[
 // 				first_name:Stas
-//				id:2.32948736e+08
+// 				id:2.32948736e+08
 // 				type:private
 //  			username:UXtas
 // 			]
@@ -64,16 +64,16 @@ func setupRouter() *gin.Engine {
 // 		]
 // 		message_id:136
 // 		text:123
-// 	]
+// 	]}`
 
-type Chat []struct {
+type Chat struct {
 	FirstName string `json:"first_name"`
 	Id        int    `json:"id"`
 	Type      string `json:"type"`
 	Username  string `json:"username"`
 }
 
-type From []struct {
+type From struct {
 	FirstName    string `json:"first_name"`
 	Id           int    `json:"id"`
 	IsBot        bool   `json:"is_bot"`
@@ -81,7 +81,7 @@ type From []struct {
 	Username     string `json:"username"`
 }
 
-type Message []struct {
+type Message struct {
 	Chat      Chat   `json:"chat"`
 	Date      int    `json:"date"`
 	From      From   `json:"from"`
