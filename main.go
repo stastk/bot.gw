@@ -54,9 +54,6 @@ func tgBawimySie(jsonData []byte) {
 		// print out if error is not nil
 		fmt.Println(err)
 	}
-	for key, value := range result {
-		fmt.Println(key, ":", value)
-	}
 	message := ">> "
 	for key, value := range result {
 		val, ok := value.(string)
@@ -67,6 +64,7 @@ func tgBawimySie(jsonData []byte) {
 			fmt.Println(message)
 		}
 		if !ok {
+			fmt.Println(key)
 			continue
 		}
 	}
