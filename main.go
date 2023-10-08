@@ -7,6 +7,7 @@ import (
 	"io"
 	"main/config"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -91,7 +92,7 @@ type Message struct {
 
 type Answer struct {
 	Message  Message `json:"message"`
-	UpdateId string  `json:"update_id"`
+	UpdateId int     `json:"update_id"`
 }
 
 func tgBawimySie(jsonData []byte) {
@@ -103,10 +104,11 @@ func tgBawimySie(jsonData []byte) {
 		fmt.Println(err)
 	}
 	fmt.Println("Answer:", answer)
-	fmt.Println("Answer message:", answer.Message)
-	fmt.Println("Name is:", answer.UpdateId)
+	fmt.Println("Answer message:", answer.Message.Text)
+	fmt.Println("Answer message:", answer.Message.MessageId)
+	fmt.Println("Answer message:", answer.UpdateId)
 
-	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + answer.UpdateId
+	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + strconv.Itoa(answer.Message.MessageId)
 
 	jsonStr := []byte(`{}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
