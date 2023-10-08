@@ -96,8 +96,8 @@ type Answer struct {
 
 func tgBawimySie(jsonData []byte) {
 	var answer Answer
-	Data := []byte(jsonData)
-	err := json.Unmarshal(Data, &answer)
+	//Data := []byte(jsonData)
+	err := json.Unmarshal(jsonData, &answer)
 
 	if err != nil {
 		fmt.Println(err)
