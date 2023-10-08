@@ -64,8 +64,7 @@ func tgBawimySie(jsonData []byte) {
 			fmt.Println(message)
 		}
 		if !ok {
-			fmt.Println(key)
-			fmt.Println(val)
+			fmt.Println(key, ":", val)
 			continue
 		}
 	}
