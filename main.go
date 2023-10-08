@@ -46,34 +46,67 @@ func setupRouter() *gin.Engine {
 
 }
 
-func tgBawimySie(jsonData []byte) {
+// message :
+// 	map[
+// 		chat:map[
+// 				first_name:Stas
+//				id:2.32948736e+08
+// 				type:private
+//  			username:UXtas
+// 			]
+// 		date:1.696748623e+09
+// 		from:map[
+// 				first_name:Stas
+// 				id:2.32948736e+08
+// 				is_bot:false
+// 				language_code:ru
+// 				username:UXtas
+// 		]
+// 		message_id:136
+// 		text:123
+// 	]
 
-	var result map[string]interface{}
-	err := json.Unmarshal([]byte(jsonData), &result)
+type Chat []struct {
+	FirstName string `json:"first_name"`
+	Id        int    `json:"id"`
+	Type      string `json:"type"`
+	Username  string `json:"username"`
+}
+
+type From []struct {
+	FirstName    string `json:"first_name"`
+	Id           int    `json:"id"`
+	IsBot        bool   `json:"is_bot"`
+	LanguageCode string `json:"language_code"`
+	Username     string `json:"username"`
+}
+
+type Message []struct {
+	Chat      Chat   `json:"chat"`
+	Date      int    `json:"date"`
+	From      From   `json:"from"`
+	MessageId int    `json:"message_id"`
+	Text      string `json:"text"`
+}
+
+type Answer struct {
+	Message  Message `json:"message"`
+	UpdateId string  `json:"update_id"`
+}
+
+func tgBawimySie(jsonData []byte) {
+	var answer Answer
+	Data := []byte(jsonData)
+	err := json.Unmarshal(Data, &answer)
+
 	if err != nil {
-		// print out if error is not nil
 		fmt.Println(err)
 	}
-	Message := ">> "
-	for key, value := range result {
-		val, ok := value.(string)
-		if ok {
-			Message = Message + "; " + key + ":" + val
-			fmt.Println(key, ":", val)
-			fmt.Println("========= 00")
-			fmt.Println(Message)
-		}
-		if !ok {
-			Message = Message + "; " + key + ":" + val
-			fmt.Println(key, ":", val)
-			fmt.Println("========= 01")
-			continue
-		}
-	}
+	fmt.Println("Answer:", answer)
+	fmt.Println("Answer message:", answer.Message)
+	fmt.Println("Name is:", answer.UpdateId)
 
-	//message := result["result"].(string)
-
-	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + Message
+	url := "https://api.telegram.org/bot" + config.GetConf().BotId + "/sendMessage?chat_id=" + config.GetConf().ChatId + "&text=" + answer.UpdateId
 
 	jsonStr := []byte(`{}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
